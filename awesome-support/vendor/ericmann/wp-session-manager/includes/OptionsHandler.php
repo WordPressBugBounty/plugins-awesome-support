@@ -49,8 +49,9 @@ class OptionsHandler extends SessionHandler
     {
         $item = new Option($data);
         $session_key = $this->sanitize($key);
-        add_option("_wp_session_${session_key}", $item->data, '', 'no');
-        add_option("_wp_session_expires_${session_key}", $item->time, '', 'no');
+
+        add_option("_wp_session_{$session_key}", $item->data, '', 'no');
+        add_option("_wp_session_expires_{$session_key}", $item->time, '', 'no');
 
         return $next($key, $data);
     }
@@ -73,8 +74,8 @@ class OptionsHandler extends SessionHandler
             if (false !== $data) {
                 $item = new Option($data);
                 $session_key = $this->sanitize($key);
-                add_option("_wp_session_${session_key}", $item->data, '', 'no');
-                add_option("_wp_session_expires_${session_key}", $item->time, '', 'no');
+                add_option("_wp_session_{$session_key}", $item->data, '', 'no');
+                add_option("_wp_session_expires_{$session_key}", $item->time, '', 'no');
             }
         }
 
@@ -92,8 +93,8 @@ class OptionsHandler extends SessionHandler
     {
         $session_key = $this->sanitize($key);
 
-        $data = get_option("_wp_session_${session_key}");
-        $expires = intval(get_option("_wp_session_expires_${session_key}"));
+        $data = get_option("_wp_session_{$session_key}");
+        $expires = intval(get_option("_wp_session_expires_{$session_key}"));
         if (false !== $data) {
             $item = new Option($data, $expires);
             if (!$item->isValid()) {
@@ -132,8 +133,8 @@ class OptionsHandler extends SessionHandler
      */
     protected function directDelete(string $key)
     {
-        delete_option("_wp_session_${key}");
-        delete_option("_wp_session_expires_${key}");
+        delete_option("_wp_session_{$key}");
+        delete_option("_wp_session_expires_{$key}");
     }
 
     /**
